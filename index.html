@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>온기 문장 서재</title>
 
-  <!-- 스마트폰 앱(웹앱/PWA)으로 설치했을 때 진짜 앱처럼 보이게 해주는 설정 -->
+  <!-- 스마트폰 앱(웹앱/PWA) 설정 -->
   <meta name="theme-color" content="#5C4632">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -27,6 +27,7 @@
       --bg-ivory: #FAF7F0;          /* 눈이 편안한 따뜻한 아이보리(미색) 배경 */
       --bg-paper: #FFFFFF;          /* 깔끔한 흰색 종이 카드 */
       --bg-memo: #F5F1E6;           /* 생각 메모 상자 배경 */
+      --bg-subtle: #FBF9F4;         /* 은은한 보조 박스 배경 */
       --bg-spotlight: linear-gradient(135deg, #FFFDF8 0%, #F4EFE3 100%);
       --text-main: #2C2621;         /* 진한 먹색 글씨 */
       --text-sub: #6E655C;          /* 부드러운 갈색 보조 글씨 */
@@ -37,7 +38,7 @@
       --track-bg: #E7E0D2;          /* 독서 목표 게이지 바탕색 */
       --shadow-card: 0 8px 24px rgba(60, 45, 30, 0.06);
       --shadow-hover: 0 14px 32px rgba(60, 45, 30, 0.13);
-      --nav-glass: rgba(255, 253, 249, 0.92);
+      --nav-glass: rgba(255, 253, 249, 0.94);
       
       /* 카테고리별 배지 색상 (낮 모드) */
       --tag-humanities-bg: #EAE4D7;
@@ -46,6 +47,12 @@
       --tag-literature-text: #2F5B41;
       --tag-psychology-bg: #EDE6F2;
       --tag-psychology-text: #563D6D;
+
+      /* 서점 브랜드 포인트 색상 */
+      --kyobo-bg: #EEF4EC;
+      --kyobo-text: #2E6425;
+      --yes24-bg: #EAF1F8;
+      --yes24-text: #1F5799;
     }
 
     * {
@@ -63,13 +70,12 @@
       min-height: 100vh;
     }
 
-    /* 화면 전체를 감싸는 배경 래퍼 */
     .page-wrapper {
       background-color: var(--bg-ivory);
       background-image: radial-gradient(circle at 50% 0%, #FFFDF9 0%, #FAF7F0 75%);
       color: var(--text-main);
       min-height: 100vh;
-      padding: 36px 20px 100px;
+      padding: 36px 20px 104px;
       transition: background-color 0.35s ease, color 0.35s ease;
     }
 
@@ -81,20 +87,21 @@
     }
 
     #night-mode:checked ~ .page-wrapper {
-      --bg-ivory: #181614;          /* 고요한 밤하늘/서재 배경색 */
-      --bg-paper: #23201D;          /* 은은한 스탠드 불빛 아래의 어두운 종이색 */
-      --bg-memo: #1B1816;           /* 밤 서재 메모 상자 배경 */
+      --bg-ivory: #181614;
+      --bg-paper: #23201D;
+      --bg-memo: #1B1816;
+      --bg-subtle: #201D1A;
       --bg-spotlight: linear-gradient(135deg, #2A2520 0%, #1F1C18 100%);
-      --text-main: #EFECE6;         /* 눈이 부시지 않은 부드러운 미색 글씨 */
-      --text-sub: #A8A096;          /* 차분한 회갈색 보조 글씨 */
-      --accent-wood: #D9AD6A;       /* 밤에 잘 보이는 따뜻한 호박빛 금색 */
-      --accent-gold: #E2B874;       /* 스탠드 조명 포인트 색상 */
+      --text-main: #EFECE6;
+      --text-sub: #A8A096;
+      --accent-wood: #D9AD6A;
+      --accent-gold: #E2B874;
       --highlight-pen: rgba(217, 173, 106, 0.3);
-      --border-soft: #38322D;       /* 어두운 종이 테두리 */
-      --track-bg: #332E29;          /* 밤 모드 게이지 바탕 */
+      --border-soft: #38322D;
+      --track-bg: #332E29;
       --shadow-card: 0 10px 28px rgba(0, 0, 0, 0.38);
       --shadow-hover: 0 16px 36px rgba(0, 0, 0, 0.55);
-      --nav-glass: rgba(35, 32, 29, 0.94);
+      --nav-glass: rgba(35, 32, 29, 0.95);
 
       --tag-humanities-bg: #3A3229;
       --tag-humanities-text: #E5C89B;
@@ -102,6 +109,11 @@
       --tag-literature-text: #9CD6B2;
       --tag-psychology-bg: #32283C;
       --tag-psychology-text: #CBB2E6;
+
+      --kyobo-bg: #233322;
+      --kyobo-text: #9CD892;
+      --yes24-bg: #1F2E3E;
+      --yes24-text: #93C2F5;
 
       background-image: radial-gradient(circle at 50% 0%, #24201C 0%, #181614 75%);
     }
@@ -227,7 +239,7 @@
       display: inline;
     }
 
-    /* ✨ 다채로움 팁 1: 한눈에 보는 나의 서재 통계 배지 3총사 */
+    /* 한눈에 보는 나의 서재 통계 배지 3총사 */
     .stats-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -326,7 +338,7 @@
     }
 
     /* =========================================
-       ✨ 다채로움 팁 2: '오늘의 밑줄' 대표 배너
+       '오늘의 밑줄' 대표 배너
        ========================================= */
     .spotlight-banner {
       background: var(--bg-spotlight);
@@ -390,7 +402,7 @@
     }
 
     /* =========================================
-       3. 카테고리 버튼 & 순수 CSS 필터링
+       3. 카테고리 버튼 & [💬 독서 토론방] 탭 전환 마법
        ========================================= */
     .filter-radio {
       display: none;
@@ -413,12 +425,12 @@
 
     .category-btn {
       cursor: pointer;
-      padding: 10px 22px;
+      padding: 10px 20px;
       border-radius: 999px;
       background-color: var(--bg-paper);
       border: 1px solid var(--border-soft);
       color: var(--text-sub);
-      font-size: 0.95rem;
+      font-size: 0.94rem;
       font-weight: 600;
       transition: all 0.2s ease;
       box-shadow: 0 2px 6px rgba(60, 45, 30, 0.03);
@@ -426,6 +438,12 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
+    }
+
+    .category-btn.community-tab-btn {
+      border-color: var(--accent-gold);
+      color: var(--accent-wood);
+      background-color: var(--bg-memo);
     }
 
     .category-btn .count {
@@ -444,11 +462,12 @@
       color: var(--text-sub);
     }
 
-    /* 상단 카테고리 탭과 스마트폰 하단 앱 탭바 동시 활성화 */
+    /* 활성화된 탭 버튼 스타일 */
     #tab-all:checked ~ .category-bar label[for="tab-all"],
     #tab-humanities:checked ~ .category-bar label[for="tab-humanities"],
     #tab-literature:checked ~ .category-bar label[for="tab-literature"],
-    #tab-psychology:checked ~ .category-bar label[for="tab-psychology"] {
+    #tab-psychology:checked ~ .category-bar label[for="tab-psychology"],
+    #tab-community:checked ~ .category-bar label[for="tab-community"] {
       background-color: var(--accent-wood);
       border-color: var(--accent-wood);
       color: #FFFFFF;
@@ -458,22 +477,37 @@
     #night-mode:checked ~ .page-wrapper #tab-all:checked ~ .category-bar label[for="tab-all"],
     #night-mode:checked ~ .page-wrapper #tab-humanities:checked ~ .category-bar label[for="tab-humanities"],
     #night-mode:checked ~ .page-wrapper #tab-literature:checked ~ .category-bar label[for="tab-literature"],
-    #night-mode:checked ~ .page-wrapper #tab-psychology:checked ~ .category-bar label[for="tab-psychology"] {
+    #night-mode:checked ~ .page-wrapper #tab-psychology:checked ~ .category-bar label[for="tab-psychology"],
+    #night-mode:checked ~ .page-wrapper #tab-community:checked ~ .category-bar label[for="tab-community"] {
       color: #181614;
     }
 
+    /* 카테고리별 카드 필터링 */
     #tab-humanities:checked ~ .cards-grid .quote-card:not([data-category="인문"]),
     #tab-literature:checked ~ .cards-grid .quote-card:not([data-category="문학"]),
     #tab-psychology:checked ~ .cards-grid .quote-card:not([data-category="심리"]) {
       display: none;
     }
 
+    /* [💬 독서 토론방] 탭을 누르면 문장 카드 그리드 대신 독서 토론방 페이지가 나타남! */
+    .community-section {
+      display: none;
+    }
+
+    #tab-community:checked ~ .cards-grid {
+      display: none;
+    }
+
+    #tab-community:checked ~ .community-section {
+      display: block;
+    }
+
     /* =========================================
-       4. 문장 카드 그리드 + 미니 입체 책 표지 + 감정 키워드
+       4. 문장 카드 그리드 + 서점 연결 + 책 추천
        ========================================= */
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(335px, 1fr));
       gap: 24px;
       align-items: start;
     }
@@ -491,7 +525,6 @@
       transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background-color 0.35s ease;
     }
 
-    /* 카드 우측 상단 금빛 책갈피 리본 장식 */
     .quote-card::after {
       content: "";
       position: absolute;
@@ -517,7 +550,7 @@
     }
 
     .card-header {
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       padding-bottom: 14px;
       border-bottom: 1px dashed var(--border-soft);
     }
@@ -538,20 +571,9 @@
       letter-spacing: 0.02em;
     }
 
-    .tag-humanities {
-      background-color: var(--tag-humanities-bg);
-      color: var(--tag-humanities-text);
-    }
-
-    .tag-literature {
-      background-color: var(--tag-literature-bg);
-      color: var(--tag-literature-text);
-    }
-
-    .tag-psychology {
-      background-color: var(--tag-psychology-bg);
-      color: var(--tag-psychology-text);
-    }
+    .tag-humanities { background-color: var(--tag-humanities-bg); color: var(--tag-humanities-text); }
+    .tag-literature { background-color: var(--tag-literature-bg); color: var(--tag-literature-text); }
+    .tag-psychology { background-color: var(--tag-psychology-bg); color: var(--tag-psychology-text); }
 
     .page-num {
       font-size: 0.8rem;
@@ -559,11 +581,11 @@
       font-family: 'Gowun Batang', serif;
     }
 
-    /* ✨ 다채로움 팁 3: 책마다 개성을 살려주는 미니 입체 책 표지 아이콘 */
     .book-profile {
       display: flex;
       align-items: center;
       gap: 14px;
+      margin-bottom: 12px;
     }
 
     .mini-book-cover {
@@ -579,7 +601,6 @@
       box-shadow: 3px 4px 10px rgba(40, 30, 20, 0.16);
     }
 
-    /* 실제 양장본 책등(Spine) 홈 표현 */
     .mini-book-cover::before {
       content: "";
       position: absolute;
@@ -640,12 +661,71 @@
       font-size: 0.82rem;
     }
 
+    /* 🛒 1. 교보문고 & YES24 바로가기 + 문장 공유 버튼 줄 */
+    .bookstore-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .store-links {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .store-btn {
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    .store-btn:hover {
+      transform: translateY(-1px);
+      opacity: 0.9;
+    }
+
+    .btn-kyobo {
+      background-color: var(--kyobo-bg);
+      color: var(--kyobo-text);
+    }
+
+    .btn-yes24 {
+      background-color: var(--yes24-bg);
+      color: var(--yes24-text);
+    }
+
+    .btn-share-mail {
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background-color: var(--bg-ivory);
+      border: 1px solid var(--border-soft);
+      color: var(--text-sub);
+      transition: all 0.15s ease;
+    }
+
+    .btn-share-mail:hover {
+      border-color: var(--accent-gold);
+      color: var(--text-main);
+    }
+
     /* 책 속의 감동적인 문장 */
     .quote-body {
       position: relative;
       padding: 10px 6px 14px;
       margin-bottom: 10px;
-      min-height: 110px;
+      min-height: 108px;
       display: flex;
       align-items: center;
     }
@@ -679,7 +759,6 @@
       border-radius: 3px;
     }
 
-    /* ✨ 다채로움 팁 4: 문장이 주는 기분을 나타낸 감성 키워드 해시태그 */
     .mood-tags {
       display: flex;
       gap: 6px;
@@ -688,7 +767,7 @@
     }
 
     .mood-chip {
-      font-size: 0.76rem;
+      font-size: 0.75rem;
       color: var(--text-sub);
       background-color: var(--bg-ivory);
       border: 1px solid var(--border-soft);
@@ -696,8 +775,15 @@
       border-radius: 999px;
     }
 
-    /* 짧은 생각 메모 접었다 펴기 */
-    .thought-memo-fold {
+    /* 짧은 생각 메모 & 책 추천 아코디언 공통 스타일 */
+    .card-drawers {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .thought-memo-fold,
+    .recommend-fold {
       background-color: var(--bg-memo);
       border: 1px solid var(--border-soft);
       border-left: 3px solid var(--accent-gold);
@@ -705,11 +791,16 @@
       overflow: hidden;
     }
 
+    .recommend-fold {
+      background-color: var(--bg-subtle);
+      border-left-color: var(--accent-wood);
+    }
+
     .memo-summary {
       cursor: pointer;
       list-style: none;
-      padding: 12px 16px;
-      font-size: 0.84rem;
+      padding: 11px 15px;
+      font-size: 0.83rem;
       font-weight: 700;
       color: var(--accent-wood);
       display: flex;
@@ -727,7 +818,7 @@
     }
 
     .fold-hint {
-      font-size: 0.76rem;
+      font-size: 0.75rem;
       font-weight: 500;
       color: var(--text-sub);
       display: inline-flex;
@@ -741,24 +832,248 @@
       transition: transform 0.25s ease;
     }
 
-    .thought-memo-fold[open] .fold-hint::after {
+    details[open] > .memo-summary .fold-hint::after {
       transform: rotate(180deg);
     }
 
-    .thought-memo-fold[open] .memo-summary {
+    details[open] > .memo-summary {
       border-bottom: 1px dashed var(--border-soft);
     }
 
     .memo-content {
-      padding: 12px 16px 14px;
-      font-size: 0.9rem;
+      padding: 12px 15px 14px;
+      font-size: 0.89rem;
       color: var(--text-sub);
       line-height: 1.6;
       word-break: keep-all;
     }
 
+    /* 🤝 2. 같은 작가 & 비슷한 결의 책 추천 리스트 */
+    .recommend-list {
+      padding: 12px 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .rec-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.84rem;
+    }
+
+    .rec-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .rec-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--accent-gold);
+    }
+
+    .rec-title {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .rec-link {
+      text-decoration: none;
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--accent-wood);
+      background-color: var(--bg-memo);
+      border: 1px solid var(--border-soft);
+      padding: 4px 9px;
+      border-radius: 6px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .rec-link:hover {
+      border-color: var(--accent-gold);
+    }
+
     /* =========================================
-       5. 하단 바닥글 (HTML/CSS 언급 제거 완료)
+       💬 3. 독서 토론 & 문장 나눔 광장 (커뮤니티 탭)
+       ========================================= */
+    .community-header-card {
+      background-color: var(--bg-paper);
+      border: 1px solid var(--border-soft);
+      border-radius: 18px;
+      padding: 28px 32px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .community-intro h2 {
+      font-family: 'Gowun Batang', Georgia, serif;
+      font-size: 1.5rem;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+
+    .community-intro p {
+      font-size: 0.94rem;
+      color: var(--text-sub);
+    }
+
+    .share-guide-box {
+      background-color: var(--bg-memo);
+      border: 1px solid var(--border-soft);
+      border-radius: 12px;
+      padding: 12px 18px;
+      font-size: 0.85rem;
+      color: var(--accent-wood);
+      font-weight: 600;
+    }
+
+    .discussion-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(460px, 1fr));
+      gap: 24px;
+    }
+
+    .discussion-card {
+      background-color: var(--bg-paper);
+      border: 1px solid var(--border-soft);
+      border-radius: 18px;
+      padding: 26px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .disc-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .disc-book-badge {
+      background-color: var(--bg-memo);
+      border: 1px solid var(--border-soft);
+      color: var(--accent-wood);
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+
+    .disc-participants {
+      font-size: 0.8rem;
+      color: var(--text-sub);
+    }
+
+    .disc-question {
+      font-family: 'Gowun Batang', Georgia, serif;
+      font-size: 1.18rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.55;
+      word-break: keep-all;
+    }
+
+    .disc-context {
+      font-size: 0.9rem;
+      color: var(--text-sub);
+      line-height: 1.6;
+      background-color: var(--bg-ivory);
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border-soft);
+    }
+
+    /* 독서 모임 멤버들의 생각 댓글 목록 */
+    .opinions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-top: 6px;
+      border-top: 1px dashed var(--border-soft);
+    }
+
+    .opinion-bubble {
+      background-color: var(--bg-memo);
+      border-radius: 12px;
+      padding: 12px 15px;
+      font-size: 0.86rem;
+    }
+
+    .opinion-author {
+      font-weight: 700;
+      color: var(--accent-wood);
+      margin-bottom: 3px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+    }
+
+    .opinion-text {
+      color: var(--text-main);
+      line-height: 1.55;
+      word-break: keep-all;
+    }
+
+    /* 다른 독자들이 공유해 준 문장 엽서 코너 */
+    .shared-postcards-title {
+      font-family: 'Gowun Batang', Georgia, serif;
+      font-size: 1.35rem;
+      margin: 36px 0 18px;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .postcards-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 18px;
+    }
+
+    .postcard-item {
+      background: var(--bg-spotlight);
+      border: 1px solid var(--border-soft);
+      border-radius: 16px;
+      padding: 20px 22px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .postcard-quote {
+      font-family: 'Gowun Batang', Georgia, serif;
+      font-size: 1rem;
+      color: var(--text-main);
+      line-height: 1.7;
+    }
+
+    .postcard-from {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      border-top: 1px dashed var(--border-soft);
+      padding-top: 10px;
+    }
+
+    /* =========================================
+       5. 하단 바닥글
        ========================================= */
     .library-footer {
       text-align: center;
@@ -768,18 +1083,15 @@
     }
 
     /* =========================================
-       📱 스마트폰 전용 하단 앱 탭바 (진짜 모바일 앱 느낌!)
+       📱 스마트폰 전용 하단 앱 탭바 (5개 메뉴)
        ========================================= */
     .mobile-bottom-nav {
       display: none;
     }
 
-    /* =========================================
-       6. 스마트폰 반응형 (앱처럼 세로로 예쁘게!)
-       ========================================= */
     @media (max-width: 640px) {
       .page-wrapper {
-        padding: 16px 14px 96px; /* 하단 앱 탭바 공간 확보 */
+        padding: 16px 14px 98px;
       }
 
       .library-header {
@@ -789,13 +1101,8 @@
         margin-bottom: 18px;
       }
 
-      .title-group h1 {
-        font-size: 1.58rem;
-      }
-
-      .title-group p {
-        font-size: 0.88rem;
-      }
+      .title-group h1 { font-size: 1.58rem; }
+      .title-group p { font-size: 0.88rem; }
 
       .header-controls {
         width: 100%;
@@ -814,25 +1121,11 @@
         gap: 6px;
       }
 
-      .stat-icon {
-        width: 34px;
-        height: 34px;
-        font-size: 1.05rem;
-      }
+      .stat-icon { width: 34px; height: 34px; font-size: 1.05rem; }
+      .stat-text strong { font-size: 0.95rem; }
 
-      .stat-text strong {
-        font-size: 0.95rem;
-      }
-
-      .goal-box {
-        padding: 15px;
-      }
-
-      .goal-info {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 4px;
-      }
+      .goal-box { padding: 15px; }
+      .goal-info { flex-direction: column; align-items: flex-start; gap: 4px; }
 
       .spotlight-banner {
         flex-direction: column;
@@ -841,13 +1134,8 @@
         margin-bottom: 20px;
       }
 
-      .spotlight-emblem {
-        display: none;
-      }
-
-      .spotlight-quote {
-        font-size: 1.08rem;
-      }
+      .spotlight-emblem { display: none; }
+      .spotlight-quote { font-size: 1.08rem; }
 
       .category-bar {
         flex-direction: column;
@@ -856,44 +1144,50 @@
       }
 
       .category-buttons {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        display: flex;
+        overflow-x: auto;
+        padding-bottom: 4px;
         gap: 8px;
       }
 
       .category-btn {
-        justify-content: center;
-        padding: 10px 0;
-        font-size: 0.88rem;
+        white-space: nowrap;
+        padding: 9px 16px;
+        font-size: 0.86rem;
       }
 
-      .helper-tip {
-        text-align: center;
-      }
+      .helper-tip { text-align: center; }
 
-      .cards-grid {
+      .cards-grid,
+      .discussion-grid,
+      .postcards-row {
         grid-template-columns: 1fr;
         gap: 16px;
       }
 
-      .quote-card {
+      .quote-card,
+      .discussion-card {
         padding: 22px 18px;
       }
 
-      /* 스마트폰 화면에서는 하단 고정 앱 내비게이션 바 표시 */
+      .community-header-card {
+        padding: 22px 18px;
+      }
+
+      /* 스마트폰 하단 고정 앱 내비게이션 바 (5개 탭) */
       .mobile-bottom-nav {
         position: fixed;
         bottom: 0;
         left: 0;
         right: 0;
-        height: 66px;
+        height: 68px;
         background-color: var(--nav-glass);
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
         border-top: 1px solid var(--border-soft);
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        padding: 6px 10px calc(6px + env(safe-area-inset-bottom));
+        grid-template-columns: repeat(5, 1fr);
+        padding: 6px 6px calc(6px + env(safe-area-inset-bottom));
         z-index: 100;
         box-shadow: 0 -4px 20px rgba(40, 30, 20, 0.08);
       }
@@ -906,7 +1200,7 @@
         justify-content: center;
         gap: 2px;
         color: var(--text-sub);
-        font-size: 0.74rem;
+        font-size: 0.7rem;
         font-weight: 600;
         border-radius: 12px;
         user-select: none;
@@ -914,13 +1208,14 @@
       }
 
       .mobile-nav-item .nav-icon {
-        font-size: 1.15rem;
+        font-size: 1.12rem;
       }
 
       #tab-all:checked ~ .mobile-bottom-nav label[for="tab-all"],
       #tab-humanities:checked ~ .mobile-bottom-nav label[for="tab-humanities"],
       #tab-literature:checked ~ .mobile-bottom-nav label[for="tab-literature"],
-      #tab-psychology:checked ~ .mobile-bottom-nav label[for="tab-psychology"] {
+      #tab-psychology:checked ~ .mobile-bottom-nav label[for="tab-psychology"],
+      #tab-community:checked ~ .mobile-bottom-nav label[for="tab-community"] {
         color: var(--accent-wood);
         background-color: var(--bg-memo);
       }
@@ -968,10 +1263,10 @@
             </div>
           </div>
           <div class="stat-item">
-            <div class="stat-icon">🕯️</div>
+            <div class="stat-icon">💬</div>
             <div class="stat-text">
-              <span>이번 달 독서 온도</span>
-              <strong>따뜻함 98°C</strong>
+              <span>열린 독서 토론</span>
+              <strong>4개의 질문방</strong>
             </div>
           </div>
         </div>
@@ -999,26 +1294,28 @@
         <div class="spotlight-emblem" aria-hidden="true">☕</div>
       </section>
 
-      <!-- 3. 카테고리 선택 라디오 스위치 -->
+      <!-- 3. 카테고리 & [💬 독서 토론방] 선택 라디오 스위치 -->
       <input type="radio" name="category-filter" id="tab-all" class="filter-radio" checked>
       <input type="radio" name="category-filter" id="tab-humanities" class="filter-radio">
       <input type="radio" name="category-filter" id="tab-literature" class="filter-radio">
       <input type="radio" name="category-filter" id="tab-psychology" class="filter-radio">
+      <input type="radio" name="category-filter" id="tab-community" class="filter-radio">
 
-      <nav class="category-bar" aria-label="도서 카테고리 선택">
+      <nav class="category-bar" aria-label="도서 카테고리 및 독서 토론방 선택">
         <div class="category-buttons">
           <label for="tab-all" class="category-btn">전체 <span class="count">6</span></label>
           <label for="tab-humanities" class="category-btn">인문 <span class="count">2</span></label>
           <label for="tab-literature" class="category-btn">문학 <span class="count">2</span></label>
           <label for="tab-psychology" class="category-btn">심리 <span class="count">2</span></label>
+          <label for="tab-community" class="category-btn community-tab-btn">💬 독서 토론 · 나눔방 <span class="count">NEW</span></label>
         </div>
-        <span class="helper-tip">✨ 주제 버튼을 누르거나 카드 아래의 생각 메모를 펼쳐보세요.</span>
+        <span class="helper-tip">✨ 서점 바로가기와 추천 도서, 독서 토론방을 자유롭게 눌러보세요!</span>
       </nav>
 
       <!-- 4. 문장 카드들 모음 -->
       <main class="cards-grid">
 
-        <!-- 카드 1: 문학 -->
+        <!-- 카드 1: 문학 (어린 왕자) -->
         <article class="quote-card" data-category="문학">
           <div class="card-header">
             <div class="card-meta-top">
@@ -1035,6 +1332,14 @@
                 </div>
               </div>
             </div>
+            <!-- 교보문고 / YES24 바로가기 & 문장 공유 -->
+            <div class="bookstore-bar">
+              <div class="store-links">
+                <a href="https://search.kyobobook.co.kr/search?keyword=%EC%96%B4%EB%A6%B0%20%EC%99%95%EC%9E%90" target="_blank" rel="noopener noreferrer" class="store-btn btn-kyobo">📗 교보문고</a>
+                <a href="https://www.yes24.com/Product/Search?domain=ALL&query=%EC%96%B4%EB%A6%B0%20%EC%99%95%EC%9E%90" target="_blank" rel="noopener noreferrer" class="store-btn btn-yes24">📘 YES24</a>
+              </div>
+              <a href="mailto:?subject=%5B%EC%98%A8%EA%B8%B0%20%EB%AC%B8%EC%9E%A5%20%EC%84%9C%EC%9E%AC%5D%20%EC%96%B4%EB%A6%B0%20%EC%99%95%EC%9E%90%20%EB%AA%85%EB%AC%B8%EC%9E%A5&body=%E2%80%9C%EA%B0%80%EC%9E%A5%20%EC%A4%91%EC%9A%94%ED%95%9C%20%EA%B2%83%EC%9D%80%20%EB%88%88%EC%97%90%20%EB%B3%B4%EC%9D%B4%EC%A7%80%20%EC%95%8A%EC%95%84.%20%EB%A7%88%EC%9D%8C%EC%9C%BC%EB%A1%9C%20%EB%B3%B4%EC%95%84%EC%95%BC%EB%A7%8C%20%EB%B9%84%EB%A1%9C%EC%86%8C%20%EB%98%90%EB%A0%B7%ED%95%98%EA%B2%8C%20%EB%B3%BC%20%EC%88%98%20%EC%9E%88%EB%8B%A8%EB%8B%A4.%E2%80%9D%20-%20%EC%96%B4%EB%A6%B0%20%EC%99%95%EC%9E%90" class="btn-share-mail">💌 문장 보내기</a>
+            </div>
           </div>
 
           <blockquote class="quote-body">
@@ -1049,18 +1354,44 @@
             <span class="mood-chip">#위로</span>
           </div>
 
-          <details class="thought-memo-fold" open>
-            <summary class="memo-summary">
-              <span>✏️ 나의 짧은 생각 메모</span>
-              <span class="fold-hint">접기/펴기</span>
-            </summary>
-            <p class="memo-content">
-              바쁘게 지내다 보면 눈에 보이는 결과만 쫓게 되는데, 소중한 사람들의 마음과 정성을 먼저 들여다보는 여유를 잊지 말아야겠다.
-            </p>
-          </details>
+          <div class="card-drawers">
+            <details class="thought-memo-fold" open>
+              <summary class="memo-summary">
+                <span>✏️ 나의 짧은 생각 메모</span>
+                <span class="fold-hint">접기/펴기</span>
+              </summary>
+              <p class="memo-content">
+                바쁘게 지내다 보면 눈에 보이는 결과만 쫓게 되는데, 소중한 사람들의 마음과 정성을 먼저 들여다보는 여유를 잊지 말아야겠다.
+              </p>
+            </details>
+
+            <!-- 같은 작가 & 비슷한 결 추천 -->
+            <details class="recommend-fold">
+              <summary class="memo-summary">
+                <span>📚 함께 읽으면 좋은 책 추천</span>
+                <span class="fold-hint">펼쳐보기</span>
+              </summary>
+              <div class="recommend-list">
+                <div class="rec-item">
+                  <div class="rec-info">
+                    <span class="rec-badge">✒️ 같은 작가의 다른 책</span>
+                    <span class="rec-title">야간비행 · 인간의 대지</span>
+                  </div>
+                  <a href="https://search.kyobobook.co.kr/search?keyword=%EC%95%BC%EA%B0%84%EB%B9%84%ED%96%89%20%EC%83%9D%ED%85%8D%EC%A5%90%ED%8E%98%EB%A6%AC" target="_blank" rel="noopener noreferrer" class="rec-link">책 보러가기 ↗</a>
+                </div>
+                <div class="rec-item">
+                  <div class="rec-info">
+                    <span class="rec-badge">🌿 비슷한 결의 따뜻한 책</span>
+                    <span class="rec-title">나의 라임 오렌지나무 (바스콘셀로스)</span>
+                  </div>
+                  <a href="https://search.kyobobook.co.kr/search?keyword=%EB%82%98%EC%9D%98%20%EB%9D%BC%EC%9E%84%20%EC%98%A4%EB%A0%8C%EC%A7%80%EB%82%98%EB%AC%B4" target="_blank" rel="noopener noreferrer" class="rec-link">책 보러가기 ↗</a>
+                </div>
+              </div>
+            </details>
+          </div>
         </article>
 
-        <!-- 카드 2: 인문 -->
+        <!-- 카드 2: 인문 (다산의 마지막 공부) -->
         <article class="quote-card" data-category="인문">
           <div class="card-header">
             <div class="card-meta-top">
@@ -1077,6 +1408,13 @@
                 </div>
               </div>
             </div>
+            <div class="bookstore-bar">
+              <div class="store-links">
+                <a href="https://search.kyobobook.co.kr/search?keyword=%EB%8B%A4%EC%82%B0%EC%9D%98%20%EB%A7%88%EC%A7%80%EB%A7%89%20%EA%B3%B5%EB%B6%80" target="_blank" rel="noopener noreferrer" class="store-btn btn-kyobo">📗 교보문고</a>
+                <a href="https://www.yes24.com/Product/Search?domain=ALL&query=%EB%8B%A4%EC%82%B0%EC%9D%98%20%EB%A7%88%EC%A7%80%EB%A7%89%20%EA%B3%B5%EB%B6%80" target="_blank" rel="noopener noreferrer" class="store-btn btn-yes24">📘 YES24</a>
+              </div>
+              <a href="mailto:?subject=%5B%EC%98%A8%EA%B8%B0%20%EB%AC%B8%EC%9E%A5%20%EC%84%9C%EC%9E%AC%5D%20%EB%8B%A4%EC%82%B0%EC%9D%98%20%EB%A7%88%EC%A7%80%EB%A7%89%20%EA%B3%B5%EB%B6%80&body=%E2%80%9C%EB%B0%B0%EC%9B%80%EC%9D%B4%EB%9E%80%20%EC%96%B4%EC%A0%9C%EC%9D%98%20%EB%82%98%EB%B3%B4%EB%8B%A4%20%EC%98%A4%EB%8A%98%20%ED%95%9C%20%EA%B1%B8%EC%9D%8C%20%EB%8D%94%20%EB%8B%A4%EC%A0%95%ED%95%98%EA%B3%A0%20%EC%A7%80%ED%98%9C%EB%A1%9C%EC%9A%B4%20%EC%82%AC%EB%9E%8C%EC%9D%B4%20%EB%90%98%EA%B8%B0%20%EC%9C%84%ED%95%B4%20%EB%A7%A4%EC%9D%BC%20%EB%A7%88%EC%9D%8C%EC%9D%84%20%EB%8B%A6%EB%8A%94%20%EC%9D%BC%EC%9D%B4%EB%8B%A4.%E2%80%9D" class="btn-share-mail">💌 문장 보내기</a>
+            </div>
           </div>
 
           <blockquote class="quote-body">
@@ -1091,18 +1429,43 @@
             <span class="mood-chip">#성장</span>
           </div>
 
-          <details class="thought-memo-fold" open>
-            <summary class="memo-summary">
-              <span>✏️ 나의 짧은 생각 메모</span>
-              <span class="fold-hint">접기/펴기</span>
-            </summary>
-            <p class="memo-content">
-              거창한 목표보다 매일 조금씩 어제보다 나은 생각을 품는 것이 진짜 공부라는 말씀이 마음에 깊이 남는다.
-            </p>
-          </details>
+          <div class="card-drawers">
+            <details class="thought-memo-fold" open>
+              <summary class="memo-summary">
+                <span>✏️ 나의 짧은 생각 메모</span>
+                <span class="fold-hint">접기/펴기</span>
+              </summary>
+              <p class="memo-content">
+                거창한 목표보다 매일 조금씩 어제보다 나은 생각을 품는 것이 진짜 공부라는 말씀이 마음에 깊이 남는다.
+              </p>
+            </details>
+
+            <details class="recommend-fold">
+              <summary class="memo-summary">
+                <span>📚 함께 읽으면 좋은 책 추천</span>
+                <span class="fold-hint">펼쳐보기</span>
+              </summary>
+              <div class="recommend-list">
+                <div class="rec-item">
+                  <div class="rec-info">
+                    <span class="rec-badge">✒️ 같은 작가의 다른 책</span>
+                    <span class="rec-title">다산의 마지막 습관 (조윤제)</span>
+                  </div>
+                  <a href="https://search.kyobobook.co.kr/search?keyword=%EB%8B%A4%EC%82%B0%EC%9D%98%20%EB%A7%88%EC%A7%80%EB%A7%89%20%EC%8A%B5%EA%B4%80" target="_blank" rel="noopener noreferrer" class="rec-link">책 보러가기 ↗</a>
+                </div>
+                <div class="rec-item">
+                  <div class="rec-info">
+                    <span class="rec-badge">🌿 비슷한 결의 고전 에세이</span>
+                    <span class="rec-title">채근담 · 마음을 읽는 고전</span>
+                  </div>
+                  <a href="https://search.kyobobook.co.kr/search?keyword=%EC%B1%84%EA%B7%BC%EB%8B%B4" target="_blank" rel="noopener noreferrer" class="rec-link">책 보러가기 ↗</a>
+                </div>
+              </div>
+            </details>
+          </div>
         </article>
 
-        <!-- 카드 3: 심리 -->
+        <!-- 카드 3: 심리 (미움받을 용기) -->
         <article class="quote-card" data-category="심리">
           <div class="card-header">
             <div class="card-meta-top">
@@ -1119,6 +1482,13 @@
                 </div>
               </div>
             </div>
+            <div class="bookstore-bar">
+              <div class="store-links">
+                <a href="https://search.kyobobook.co.kr/search?keyword=%EB%AF%B8%EC%9B%80%EB%B0%9B%EC%9D%84%20%EC%9A%A9%EA%B8%B0" target="_blank" rel="noopener noreferrer" class="store-btn btn-kyobo">📗 교보문고</a>
+                <a href="https://www.yes24.com/Product/Search?domain=ALL&query=%EB%AF%B8%EC%9B%80%EB%B0%9B%EC%9D%84%20%EC%9A%A9%EA%B8%B0" target="_blank" rel="noopener noreferrer" class="store-btn btn-yes24">📘 YES24</a>
+              </div>
+              <a href="mailto:?subject=%5B%EC%98%A8%EA%B8%B0%20%EB%AC%B8%EC%9E%A5%20%EC%84%9C%EC%9E%AC%5D%20%EB%AF%B8%EC%9B%80%EB%B0%9B%EC%9D%84%20%EC%9A%A9%EA%B8%B0&body=%E2%80%9C%EC%A7%80%EA%B8%88%20%EC%97%AC%EA%B8%B0%EC%97%90%20%EC%9E%88%EB%8A%94%20%EB%82%B4%EA%B0%80%20%EA%B3%BC%EA%B1%B0%EC%97%90%20%EC%96%B4%EB%96%A4%20%EC%9D%98%EB%AF%B8%EB%A5%BC%20%EB%B6%80%EC%97%AC%ED%95%98%EB%8A%90%EB%83%90%EA%B0%80%20%EB%82%98%EC%9D%98%20%EC%82%B6%EC%9D%84%20%EA%B2%B0%EC%A0%95%ED%95%9C%EB%8B%A4.%E2%80%9D" class="btn-share-mail">💌 문장 보내기</a>
+            </div>
           </div>
 
           <blockquote class="quote-body">
@@ -1133,18 +1503,43 @@
             <span class="mood-chip">#자존감</span>
           </div>
 
-          <details class="thought-memo-fold">
-            <summary class="memo-summary">
-              <span>✏️ 나의 짧은 생각 메모</span>
-              <span class="fold-hint">접기/펴기</span>
-            </summary>
-            <p class="memo-content">
-              지나간 실수에 발목 잡히기보다, 지금 이 순간 내가 선택할 수 있는 작은 용기에 집중하자!
-            </p>
-          </details>
+          <div class="card-drawers">
+            <details class="thought-memo-fold">
+              <summary class="memo-summary">
+                <span>✏️ 나의 짧은 생각 메모</span>
+                <span class="fold-hint">접기/펴기</span>
+              </summary>
+              <p class="memo-content">
+                지나간 실수에 발목 잡히기보다, 지금 이 순간 내가 선택할 수 있는 작은 용기에 집중하자!
+              </p>
+            </details>
+
+            <details class="recommend-fold">
+              <summary class="memo-summary">
+                <span>📚 함께 읽으면 좋은 책 추천</span>
+                <span class="fold-hint">펼쳐보기</span>
+              </summary>
+              <div class="recommend-list">
+                <div class="rec-item">
+                  <div class="rec-info">
+                    <span class="rec-badge">✒️ 같은 작가의 후속작</span>
+                    <span class="rec-title">행복해질 용기 (기시미 이치로)</span>
+                  </div>
+                  <a href="https://search.kyobobook.co.kr/search?keyword=%ED%96%89%EB%B3%B5%ED%95%B4%EC%A7%88%20%EC%9A%A9%EA%B8%B0" target="_blank" rel="noopener noreferrer" class="rec-link">책 보러가기 ↗</a>
+                </div>
+                <div class="rec-item">
+                  <div class="rec-info">
+                    <span class="rec-badge">🌿 비슷한 결의 심리 도서</span>
+                    <span class="rec-title">자존감 수업 (윤홍균)</span>
+                  </div>
+                  <a href="https://search.kyobobook.co.kr/search?keyword=%EC%9E%90%EC%A1%B4%EA%B0%90%20%EC%88%98%EC%97%85" target="_blank" rel="noopener noreferrer" class="rec-link">책 보러가기 ↗</a>
+                </div>
+              </div>
+            </details>
+          </div>
         </article>
 
-        <!-- 카드 4: 문학 -->
+        <!-- 카드 4: 문학 (모모) -->
         <article class="quote-card" data-category="문학">
           <div class="card-header">
             <div class="card-meta-top">
@@ -1161,6 +1556,13 @@
                 </div>
               </div>
             </div>
+            <div class="bookstore-bar">
+              <div class="store-links">
+                <a href="https://search.kyobobook.co.kr/search?keyword=%EB%AA%A8%EB%AA%A8%20%EB%AF%B8%ED%95%98%EC%97%98%20%EC%97%94%EB%8D%B0" target="_blank" rel="noopener noreferrer" class="store-btn btn-kyobo">📗 교보문고</a>
+                <a href="https://www.yes24.com/Product/Search?domain=ALL&query=%EB%AA%A8%EB%AA%A8%20%EB%AF%B8%ED%95%98%EC%97%98%20%EC%97%94%EB%8D%B0" target="_blank" rel="noopener noreferrer" class="store-btn btn-yes24">📘 YES24</a>
+              </div>
+              <a href="mailto:?subject=%5B%EC%98%A8%EA%B8%B0%20%EB%AC%B8%EC%9E%A5%20%EC%84%9C%EC%9E%AC%5D%20%EB%AA%A8%EB%AA%A8&body=%E2%80%9C%EB%8B%AC%EB%A0%A5%EC%97%90%20%EC%A0%81%ED%9E%8C%20%EC%8B%9C%EA%B0%84%EB%B3%B4%EB%8B%A4%20%EB%8D%94%20%EC%A7%84%EC%A7%9C%EC%9D%B8%20%EC%8B%9C%EA%B0%84%EC%9D%80%2C%20%EB%88%84%EA%B5%B0%EA%B0%80%EC%9D%98%20%EC%9D%B4%EC%95%BC%EA%B8%B0%EB%A5%BC%20%EC%A7%84%EC%8B%AC%EC%9C%BC%EB%A1%9C%20%EA%B7%80%20%EA%B8%B0%EC%9A%B8%EC%97%AC%20%EB%93%A4%EC%96%B4%EC%A3%BC%EB%8D%98%20%EB%94%B0%EB%9C%BB%ED%95%9C%20%EC%88%9C%EA%B0%84%EB%93%A4%EC%9D%B4%EB%8B%A4.%E2%80%9D" class="btn-share-mail">💌 문장 보내기</a>
+            </div>
           </div>
 
           <blockquote class="quote-body">
@@ -1175,18 +1577,43 @@
             <span class="mood-chip">#공감</span>
           </div>
 
-          <details class="thought-memo-fold">
-            <summary class="memo-summary">
-              <span>✏️ 나의 짧은 생각 메모</span>
-              <span class="fold-hint">접기/펴기</span>
-            </summary>
-            <p class="memo-content">
-              모모처럼 친구와 가족의 이야기를 끝까지 다정하게 들어주는 것만으로도 세상에 온기를 전할 수 있다.
-            </p>
-          </details>
+          <div class="card-drawers">
+            <details class="thought-memo-fold">
+              <summary class="memo-summary">
+                <span>✏️ 나의 짧은 생각 메모</span>
+                <span class="fold-hint">접기/펴기</span>
+              </summary>
+              <p class="memo-content">
+                모모처럼 친구와 가족의 이야기를 끝까지 다정하게 들어주는 것만으로도 세상에 온기를 전할 수 있다.
+              </p>
+            </details>
+
+            <details class="recommend-fold">
+              <summary class="memo-summary">
+                <span>📚 함께 읽으면 좋은 책 추천</span>
+                <span class="fold-hint">펼쳐보기</span>
+              </summary>
+              <div class="recommend-list">
+                <div class="rec-item">
+                  <div class="rec-info">
+                    <span class="rec-badge">✒️ 같은 작가의 대표작</span>
+                    <span class="rec-title">끝없는 이야기 (미하엘 엔데)</span>
+                  </div>
+                  <a href="https://search.kyobobook.co.kr/search?keyword=%EB%81%9D%EC%97%86%EB%8A%94%20%EC%9D%B4%EC%95%BC%EA%B8%B0%20%EB%AF%B8%ED%95%98%EC%97%98%20%EC%97%94%EB%8D%B0" target="_blank" rel="noopener noreferrer" class="rec-link">책 보러가기 ↗</a>
+                </div>
+                <div class="rec-item">
+                  <div class="rec-info">
+                    <span class="rec-badge">🌿 비슷한 결의 어른 동화</span>
+                    <span class="rec-title">아몬드 (손원평)</span>
+                  </div>
+                  <a href="https://search.kyobobook.co.kr/search?keyword=%EC%95%84%EB%AA%AC%EB%93%9C%20%EC%86%90%EC%9B%90%ED%8F%89" target="_blank" rel="noopener noreferrer" class="rec-link">책 보러가기 ↗</a>
+                </div>
+              </div>
+            </details>
+          </div>
         </article>
 
-        <!-- 카드 5: 인문 -->
+        <!-- 카드 5: 인문 (코스모스) -->
         <article class="quote-card" data-category="인문">
           <div class="card-header">
             <div class="card-meta-top">
@@ -1203,6 +1630,13 @@
                 </div>
               </div>
             </div>
+            <div class="bookstore-bar">
+              <div class="store-links">
+                <a href="https://search.kyobobook.co.kr/search?keyword=%EC%BD%94%EC%8A%A4%EB%AA%A8%EC%8A%A4%20%EC%B9%BC%20%EC%84%B8%EC%9D%B4%EA%B1%B4" target="_blank" rel="noopener noreferrer" class="store-btn btn-kyobo">📗 교보문고</a>
+                <a href="https://www.yes24.com/Product/Search?domain=ALL&query=%EC%BD%94%EC%8A%A4%EB%AA%A8%EC%8A%A4%20%EC%B9%BC%20%EC%84%B8%EC%9D%B4%EA%B1%B4" target="_blank" rel="noopener noreferrer" class="store-btn btn-yes24">📘 YES24</a>
+              </div>
+              <a href="mailto:?subject=%5B%EC%98%A8%EA%B8%B0%20%EB%AC%B8%EC%9E%A5%20%EC%84%9C%EC%9E%AC%5D%20%EC%BD%94%EC%8A%A4%EB%AA%A8%EC%8A%A4&body=%E2%80%9C%EA%B4%91%EB%A7%89%ED%95%9C%20%EC%9A%B0%EC%A3%BC%EC%99%80%20%EB%81%9D%EC%97%86%EB%8A%94%20%EC%8B%9C%EA%B0%84%20%EC%86%8D%EC%97%90%EC%84%9C%2C%20%EA%B0%99%EC%9D%80%20%ED%96%89%EC%84%B1%EA%B3%BC%20%EA%B0%99%EC%9D%80%20%EC%8B%9C%EB%8C%80%EB%A5%BC%20%EB%8B%B9%EC%8B%A0%EA%B3%BC%20%ED%95%A8%EA%BB%98%20%EC%82%B4%EC%95%84%EA%B0%88%20%EC%88%98%20%EC%9E%88%EB%8B%A4%EB%8A%94%20%EA%B2%83%EC%9D%80%20%EB%82%98%EC%97%90%EA%B2%8C%20%ED%81%B0%20%EA%B8%B0%EC%81%A8%EC%9D%B4%EB%8B%A4.%E2%80%9D" class="btn-share-mail">💌 문장 보내기</a>
+            </div>
           </div>
 
           <blockquote class="quote-body">
@@ -1217,18 +1651,43 @@
             <span class="mood-chip">#감사</span>
           </div>
 
-          <details class="thought-memo-fold">
-            <summary class="memo-summary">
-              <span>✏️ 나의 짧은 생각 메모</span>
-              <span class="fold-hint">접기/펴기</span>
-            </summary>
-            <p class="memo-content">
-              과학책인데도 한 편의 시처럼 뭉클하다. 오늘 만나는 사람들과의 인연이 얼마나 기적 같은 일인지 다시금 느낀다.
-            </p>
-          </details>
+          <div class="card-drawers">
+            <details class="thought-memo-fold">
+              <summary class="memo-summary">
+                <span>✏️ 나의 짧은 생각 메모</span>
+                <span class="fold-hint">접기/펴기</span>
+              </summary>
+              <p class="memo-content">
+                과학책인데도 한 편의 시처럼 뭉클하다. 오늘 만나는 사람들과의 인연이 얼마나 기적 같은 일인지 다시금 느낀다.
+              </p>
+            </details>
+
+            <details class="recommend-fold">
+              <summary class="memo-summary">
+                <span>📚 함께 읽으면 좋은 책 추천</span>
+                <span class="fold-hint">펼쳐보기</span>
+              </summary>
+              <div class="recommend-list">
+                <div class="rec-item">
+                  <div class="rec-info">
+                    <span class="rec-badge">✒️ 같은 작가의 다른 책</span>
+                    <span class="rec-title">창백한 푸른 점 (칼 세이건)</span>
+                  </div>
+                  <a href="https://search.kyobobook.co.kr/search?keyword=%EC%B0%BD%EB%B0%B1%ED%95%9C%20%ED%91%B8%EB%A5%B8%20%EC%A0%90" target="_blank" rel="noopener noreferrer" class="rec-link">책 보러가기 ↗</a>
+                </div>
+                <div class="rec-item">
+                  <div class="rec-info">
+                    <span class="rec-badge">🌿 비슷한 결의 감성 과학 에세이</span>
+                    <span class="rec-title">물고기는 존재하지 않는다 (룰루 밀러)</span>
+                  </div>
+                  <a href="https://search.kyobobook.co.kr/search?keyword=%EB%AC%BC%EA%B3%A0%EA%B8%B0%EB%8A%94%20%EC%A1%B4%EC%9E%AC%ED%95%98%EC%A7%80%20%EC%95%8A%EB%8A%94%EB%8B%A4" target="_blank" rel="noopener noreferrer" class="rec-link">책 보러가기 ↗</a>
+                </div>
+              </div>
+            </details>
+          </div>
         </article>
 
-        <!-- 카드 6: 심리 -->
+        <!-- 카드 6: 심리 (마음의 법칙) -->
         <article class="quote-card" data-category="심리">
           <div class="card-header">
             <div class="card-meta-top">
@@ -1245,6 +1704,13 @@
                 </div>
               </div>
             </div>
+            <div class="bookstore-bar">
+              <div class="store-links">
+                <a href="https://search.kyobobook.co.kr/search?keyword=%EB%A7%88%EC%9D%8C%EC%9D%98%20%EB%B2%95%EC%B9%99" target="_blank" rel="noopener noreferrer" class="store-btn btn-kyobo">📗 교보문고</a>
+                <a href="https://www.yes24.com/Product/Search?domain=ALL&query=%EB%A7%88%EC%9D%8C%EC%9D%98%20%EB%B2%95%EC%B9%99" target="_blank" rel="noopener noreferrer" class="store-btn btn-yes24">📘 YES24</a>
+              </div>
+              <a href="mailto:?subject=%5B%EC%98%A8%EA%B8%B0%20%EB%AC%B8%EC%9E%A5%20%EC%84%9C%EC%9E%AC%5D%20%EB%A7%88%EC%9D%8C%EC%9D%98%20%EB%B2%95%EC%B9%99&body=%E2%80%9C%EB%B6%88%EC%95%88%EC%9D%80%20%EC%9A%B0%EB%A6%AC%EA%B0%80%20%EB%AC%B4%EC%96%B8%EA%B0%80%EB%A5%BC%20%EC%86%8C%EC%A4%91%ED%9E%88%20%EC%97%AC%EA%B8%B0%EA%B3%A0%20%EC%9E%98%20%ED%95%B4%EB%82%B4%EA%B3%A0%20%EC%8B%B6%EC%96%B4%20%ED%95%9C%EB%8B%A4%EB%8A%94%20%EB%A7%88%EC%9D%8C%EC%9D%98%20%EB%8B%A4%EC%A0%95%ED%95%9C%20%EC%8B%A0%ED%98%B8%EC%9D%BC%20%EB%BF%90%EC%9D%B4%EB%8B%A4.%E2%80%9D" class="btn-share-mail">💌 문장 보내기</a>
+            </div>
           </div>
 
           <blockquote class="quote-body">
@@ -1259,28 +1725,212 @@
             <span class="mood-chip">#응원</span>
           </div>
 
-          <details class="thought-memo-fold">
-            <summary class="memo-summary">
-              <span>✏️ 나의 짧은 생각 메모</span>
-              <span class="fold-hint">접기/펴기</span>
-            </summary>
-            <p class="memo-content">
-              새로운 일을 시작할 때 떨리는 건 내가 그만큼 진심이기 때문이구나! 떨리는 내 마음을 토닥여 주어야겠다.
-            </p>
-          </details>
+          <div class="card-drawers">
+            <details class="thought-memo-fold">
+              <summary class="memo-summary">
+                <span>✏️ 나의 짧은 생각 메모</span>
+                <span class="fold-hint">접기/펴기</span>
+              </summary>
+              <p class="memo-content">
+                새로운 일을 시작할 때 떨리는 건 내가 그만큼 진심이기 때문이구나! 떨리는 내 마음을 토닥여 주어야겠다.
+              </p>
+            </details>
+
+            <details class="recommend-fold">
+              <summary class="memo-summary">
+                <span>📚 함께 읽으면 좋은 책 추천</span>
+                <span class="fold-hint">펼쳐보기</span>
+              </summary>
+              <div class="recommend-list">
+                <div class="rec-item">
+                  <div class="rec-info">
+                    <span class="rec-badge">🌿 비슷한 결의 따뜻한 심리 에세이</span>
+                    <span class="rec-title">내가 틀릴 수도 있습니다 (비욘 나티코 린데블라드)</span>
+                  </div>
+                  <a href="https://search.kyobobook.co.kr/search?keyword=%EB%82%B4%EA%B0%80%20%ED%8B%80%EB%A6%B4%20%EC%88%98%EB%8F%84%20%EC%9E%88%EC%8A%B5%EB%8B%88%EB%8B%A4" target="_blank" rel="noopener noreferrer" class="rec-link">책 보러가기 ↗</a>
+                </div>
+                <div class="rec-item">
+                  <div class="rec-info">
+                    <span class="rec-badge">🌿 마음을 다독이는 책</span>
+                    <span class="rec-title">불안이라는 위안 (김혜남)</span>
+                  </div>
+                  <a href="https://search.kyobobook.co.kr/search?keyword=%EB%B6%88%EC%95%88%EC%9D%B4%EB%9D%BC%EB%8A%94%20%EC%9C%84%EC%95%88" target="_blank" rel="noopener noreferrer" class="rec-link">책 보러가기 ↗</a>
+                </div>
+              </div>
+            </details>
+          </div>
         </article>
 
       </main>
+
+      <!-- 💬 5. [독서 토론 · 나눔방] 탭을 선택했을 때만 열리는 공간! -->
+      <section class="community-section" aria-label="독서 토론 및 문장 나눔 광장">
+        <div class="community-header-card">
+          <div class="community-intro">
+            <h2>💬 온기 독서 토론 · 문장 나눔방</h2>
+            <p>책을 읽으며 생긴 궁금증이나 함께 이야기 나누고 싶은 질문들을 모아서 생각을 나누는 다정한 공간입니다.</p>
+          </div>
+          <div class="share-guide-box">
+            💡 각 문장 카드의 <strong>[💌 문장 보내기]</strong>를 누르면 친구에게 바로 문장을 선물할 수 있어요!
+          </div>
+        </div>
+
+        <div class="discussion-grid">
+          <!-- 토론 주제 1 -->
+          <article class="discussion-card">
+            <div class="disc-top">
+              <span class="disc-book-badge">🦊 《어린 왕자》 읽고 나누는 질문</span>
+              <span class="disc-participants">💭 12명 참여 중</span>
+            </div>
+            <h3 class="disc-question">
+              Q. 어른이 되면서 우리가 잃어버린 '코끼리를 삼킨 보아뱀'은 무엇일까요?
+            </h3>
+            <p class="disc-context">
+              어린 왕자에서는 어른들이 숫자나 겉모습으로만 세상을 판단한다고 말해요. 여러분이 어릴 때는 소중히 여겼지만 바빠지면서 잊고 지냈던 순수한 꿈이나 시선이 있다면 함께 나누어 보아요!
+            </p>
+            <div class="opinions-list">
+              <div class="opinion-bubble">
+                <div class="opinion-author">
+                  <span>🌱 책읽는유미</span>
+                  <span>방금 전</span>
+                </div>
+                <p class="opinion-text">
+                  비 오는 날 창밖 구름 모양을 보며 상상하던 여유요! 요즘은 우산 챙길 걱정부터 앞섰는데 오늘은 하늘을 한 번 더 올려다보려고요.
+                </p>
+              </div>
+              <div class="opinion-bubble">
+                <div class="opinion-author">
+                  <span>☕ 가을책갈피</span>
+                  <span>2시간 전</span>
+                </div>
+                <p class="opinion-text">
+                  친구를 사귈 때 조건 없이 그냥 함께 웃는 시간이 좋아서 만났던 그 마음인 것 같아요.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <!-- 토론 주제 2 -->
+          <article class="discussion-card">
+            <div class="disc-top">
+              <span class="disc-book-badge">⏳ 《모모》 읽고 나누는 질문</span>
+              <span class="disc-participants">💭 9명 참여 중</span>
+            </div>
+            <h3 class="disc-question">
+              Q. 시간을 아끼려고 빨리빨리 움직일수록 왜 마음은 더 바빠질까요?
+            </h3>
+            <p class="disc-context">
+              책 속의 '회색 신사'들은 사람들에게 시간을 저축하라고 부추기지만, 정작 사람들의 삶은 점점 메말라 가요. 바쁜 일상 속에서 내 마음의 시계를 천천히 흐르게 해주는 나만의 비법이 있나요?
+            </p>
+            <div class="opinions-list">
+              <div class="opinion-bubble">
+                <div class="opinion-author">
+                  <span>🕯️ 밤서재지기</span>
+                  <span>어제</span>
+                </div>
+                <p class="opinion-text">
+                  스마트폰을 잠시 내려놓고 좋아하는 책의 문장을 손으로 천천히 따라 적어보는 필사 시간이 저에게는 가장 큰 쉼표예요.
+                </p>
+              </div>
+              <div class="opinion-bubble">
+                <div class="opinion-author">
+                  <span>🌿 다정한산책</span>
+                  <span>2일 전</span>
+                </div>
+                <p class="opinion-text">
+                  가족과 저녁을 먹을 때만큼은 TV를 끄고 오늘 하루 어땠는지 서로 끝까지 들어주기로 약속했어요!
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <!-- 토론 주제 3 -->
+          <article class="discussion-card">
+            <div class="disc-top">
+              <span class="disc-book-badge">🌱 《미움받을 용기》 읽고 나누는 질문</span>
+              <span class="disc-participants">💭 15명 참여 중</span>
+            </div>
+            <h3 class="disc-question">
+              Q. '남에게 미움받을 용기'와 '무례함'의 차이는 어디에 있을까요?
+            </h3>
+            <p class="disc-context">
+              책을 읽다가 가장 많이 떠오른 의문점이에요! 타인의 시선에 휘둘리지 않으면서도 주변 사람들에게 다정한 사람으로 남으려면 어떤 마음의 기준이 필요할까요?
+            </p>
+            <div class="opinions-list">
+              <div class="opinion-bubble">
+                <div class="opinion-author">
+                  <span>📘 푸른문장</span>
+                  <span>3시간 전</span>
+                </div>
+                <p class="opinion-text">
+                  상대방을 예의 바르게 존중하되, 그 사람이 나를 어떻게 평가할지는 그 사람의 몫으로 남겨두는 '마음의 건강한 거리두기'라고 생각해요!
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <!-- 토론 주제 4 -->
+          <article class="discussion-card">
+            <div class="disc-top">
+              <span class="disc-book-badge">🪐 《코스모스》 읽고 나누는 질문</span>
+              <span class="disc-participants">💭 8명 참여 중</span>
+            </div>
+            <h3 class="disc-question">
+              Q. 끝없이 넓은 우주를 생각하면 마음이 외로워지나요, 아니면 오히려 든든해지나요?
+            </h3>
+            <p class="disc-context">
+              우주 먼지처럼 작은 지구에 살면서도 우리는 서로 사랑하고 고민하며 살아가잖아요. 이 문장을 읽고 느낀 각자의 감상을 들려주세요.
+            </p>
+            <div class="opinions-list">
+              <div class="opinion-bubble">
+                <div class="opinion-author">
+                  <span>🌟 별빛독서</span>
+                  <span>1일 전</span>
+                </div>
+                <p class="opinion-text">
+                  그 넓은 우주에서 지금 내 옆에 있는 가족과 친구들을 만났다는 사실이 엄청난 기적처럼 느껴져서 마음이 훨씬 따뜻해졌어요!
+                </p>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- 독자들이 함께 나눈 한 줄 문장 엽서 코너 -->
+        <h3 class="shared-postcards-title">📮 이웃 독자들이 보내온 문장 엽서</h3>
+        <div class="postcards-row">
+          <div class="postcard-item">
+            <p class="postcard-quote">“네가 오후 네 시에 온다면 나는 세 시부터 행복해지기 시작할 거야.”</p>
+            <div class="postcard-from">
+              <span>《어린 왕자》</span>
+              <span>From. 은하수책방 님</span>
+            </div>
+          </div>
+          <div class="postcard-item">
+            <p class="postcard-quote">“흔들리지 않고 피는 꽃이 어디 있으랴. 이 세상 그 어떤 아름다운 꽃들도 다 흔들리면서 피었나니.”</p>
+            <div class="postcard-from">
+              <span>도종환, 《흔들리며 피는 꽃》</span>
+              <span>From. 봄날의햇살 님</span>
+            </div>
+          </div>
+          <div class="postcard-item">
+            <p class="postcard-quote">“할 수 있다고 생각하든 할 수 없다고 생각하든, 당신의 생각이 옳다.”</p>
+            <div class="postcard-from">
+              <span>헨리 포드 명언</span>
+              <span>From. 산책하는고양이 님</span>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <footer class="library-footer">
         <p>온기 문장 서재 · 매일 한 문장씩 마음을 채우는 나만의 독서 기록장</p>
       </footer>
 
-      <!-- 📱 스마트폰에서 앱처럼 사용할 수 있는 하단 고정 탭바 -->
+      <!-- 📱 스마트폰에서 앱처럼 사용할 수 있는 하단 고정 탭바 (5개 메뉴) -->
       <nav class="mobile-bottom-nav" aria-label="모바일 앱 하단 메뉴">
         <label for="tab-all" class="mobile-nav-item">
           <span class="nav-icon">🏠</span>
-          <span>전체 서재</span>
+          <span>전체</span>
         </label>
         <label for="tab-humanities" class="mobile-nav-item">
           <span class="nav-icon">🏛️</span>
@@ -1293,6 +1943,10 @@
         <label for="tab-psychology" class="mobile-nav-item">
           <span class="nav-icon">💜</span>
           <span>심리</span>
+        </label>
+        <label for="tab-community" class="mobile-nav-item">
+          <span class="nav-icon">💬</span>
+          <span>토론방</span>
         </label>
       </nav>
     </div>
