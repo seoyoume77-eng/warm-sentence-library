@@ -2,8 +2,18 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>온기 문장 서재</title>
+
+  <!-- 스마트폰 앱(웹앱/PWA)으로 설치했을 때 진짜 앱처럼 보이게 해주는 설정 -->
+  <meta name="theme-color" content="#5C4632">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="온기서재">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="apple-touch-icon" href="icon.svg">
+
   <!-- 책처럼 읽기 편한 한글 폰트(고운바탕, 프리텐다드) 불러오기 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,15 +27,17 @@
       --bg-ivory: #FAF7F0;          /* 눈이 편안한 따뜻한 아이보리(미색) 배경 */
       --bg-paper: #FFFFFF;          /* 깔끔한 흰색 종이 카드 */
       --bg-memo: #F5F1E6;           /* 생각 메모 상자 배경 */
+      --bg-spotlight: linear-gradient(135deg, #FFFDF8 0%, #F4EFE3 100%);
       --text-main: #2C2621;         /* 진한 먹색 글씨 */
       --text-sub: #6E655C;          /* 부드러운 갈색 보조 글씨 */
       --accent-wood: #5C4632;       /* 서재의 원목 포인트 색상 */
       --accent-gold: #C89B57;       /* 따뜻한 금빛 책갈피 색상 */
-      --highlight-pen: rgba(246, 216, 138, 0.45); /* 부드러운 노란빛 형광펜 */
+      --highlight-pen: rgba(246, 216, 138, 0.5); /* 부드러운 노란빛 형광펜 */
       --border-soft: #E8E2D5;       /* 은은한 종이 테두리 */
       --track-bg: #E7E0D2;          /* 독서 목표 게이지 바탕색 */
       --shadow-card: 0 8px 24px rgba(60, 45, 30, 0.06);
-      --shadow-hover: 0 14px 32px rgba(60, 45, 30, 0.12);
+      --shadow-hover: 0 14px 32px rgba(60, 45, 30, 0.13);
+      --nav-glass: rgba(255, 253, 249, 0.92);
       
       /* 카테고리별 배지 색상 (낮 모드) */
       --tag-humanities-bg: #EAE4D7;
@@ -40,6 +52,7 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
@@ -50,37 +63,38 @@
       min-height: 100vh;
     }
 
-    /* 화면 전체를 감싸는 배경 래퍼 (밤 독서 모드 시 색상이 부드럽게 전환됨) */
+    /* 화면 전체를 감싸는 배경 래퍼 */
     .page-wrapper {
       background-color: var(--bg-ivory);
       background-image: radial-gradient(circle at 50% 0%, #FFFDF9 0%, #FAF7F0 75%);
       color: var(--text-main);
       min-height: 100vh;
-      padding: 40px 20px 80px;
+      padding: 36px 20px 100px;
       transition: background-color 0.35s ease, color 0.35s ease;
     }
 
     /* =========================================
-       🌙 밤 독서 모드 (다크 모드) 팔레트 덮어쓰기
+       🌙 밤 독서 모드 (다크 모드) 팔레트
        ========================================= */
     .theme-checkbox {
       display: none;
     }
 
-    /* 밤 독서 모드 스위치가 켜지면 아래 색상으로 자동 변신! */
     #night-mode:checked ~ .page-wrapper {
-      --bg-ivory: #1C1917;          /* 고요한 밤하늘/서재 배경색 */
-      --bg-paper: #272320;          /* 은은한 스탠드 불빛 아래의 어두운 종이색 */
-      --bg-memo: #1F1C19;           /* 밤 서재 메모 상자 배경 */
+      --bg-ivory: #181614;          /* 고요한 밤하늘/서재 배경색 */
+      --bg-paper: #23201D;          /* 은은한 스탠드 불빛 아래의 어두운 종이색 */
+      --bg-memo: #1B1816;           /* 밤 서재 메모 상자 배경 */
+      --bg-spotlight: linear-gradient(135deg, #2A2520 0%, #1F1C18 100%);
       --text-main: #EFECE6;         /* 눈이 부시지 않은 부드러운 미색 글씨 */
       --text-sub: #A8A096;          /* 차분한 회갈색 보조 글씨 */
       --accent-wood: #D9AD6A;       /* 밤에 잘 보이는 따뜻한 호박빛 금색 */
       --accent-gold: #E2B874;       /* 스탠드 조명 포인트 색상 */
-      --highlight-pen: rgba(217, 173, 106, 0.28); /* 밤 모드 형광펜 밑줄 */
-      --border-soft: #3A342F;       /* 어두운 종이 테두리 */
-      --track-bg: #36302B;          /* 밤 모드 게이지 바탕 */
-      --shadow-card: 0 10px 28px rgba(0, 0, 0, 0.35);
-      --shadow-hover: 0 16px 36px rgba(0, 0, 0, 0.5);
+      --highlight-pen: rgba(217, 173, 106, 0.3);
+      --border-soft: #38322D;       /* 어두운 종이 테두리 */
+      --track-bg: #332E29;          /* 밤 모드 게이지 바탕 */
+      --shadow-card: 0 10px 28px rgba(0, 0, 0, 0.38);
+      --shadow-hover: 0 16px 36px rgba(0, 0, 0, 0.55);
+      --nav-glass: rgba(35, 32, 29, 0.94);
 
       --tag-humanities-bg: #3A3229;
       --tag-humanities-text: #E5C89B;
@@ -89,7 +103,7 @@
       --tag-psychology-bg: #32283C;
       --tag-psychology-text: #CBB2E6;
 
-      background-image: radial-gradient(circle at 50% 0%, #26221E 0%, #1C1917 75%);
+      background-image: radial-gradient(circle at 50% 0%, #24201C 0%, #181614 75%);
     }
 
     .library-container {
@@ -98,24 +112,23 @@
     }
 
     /* =========================================
-       2. 맨 위: 서재 제목과 독서 목표 게이지 바
+       2. 맨 위: 서재 제목 + 미니 통계 + 독서 목표 게이지
        ========================================= */
     .library-header {
       background-color: var(--bg-paper);
       border: 1px solid var(--border-soft);
-      border-radius: 20px;
-      padding: 36px 40px;
+      border-radius: 22px;
+      padding: 36px 40px 32px;
       box-shadow: var(--shadow-card);
-      margin-bottom: 32px;
+      margin-bottom: 24px;
       display: flex;
       flex-direction: column;
-      gap: 28px;
+      gap: 24px;
       position: relative;
       overflow: hidden;
-      transition: background-color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+      transition: background-color 0.35s ease, border-color 0.35s ease;
     }
 
-    /* 서재 상단 책갈피 장식줄 */
     .library-header::before {
       content: "";
       position: absolute;
@@ -136,8 +149,8 @@
 
     .title-group .subtitle {
       display: inline-block;
-      font-size: 0.85rem;
-      font-weight: 600;
+      font-size: 0.82rem;
+      font-weight: 700;
       color: var(--accent-gold);
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -173,10 +186,8 @@
       font-weight: 600;
       padding: 9px 15px;
       border-radius: 999px;
-      transition: background-color 0.35s ease, border-color 0.35s ease;
     }
 
-    /* 🌙 밤 독서 모드 토글 버튼 스타일 */
     .night-toggle-btn {
       cursor: pointer;
       display: inline-flex;
@@ -198,7 +209,6 @@
       transform: translateY(-1px);
     }
 
-    /* 낮/밤 상태에 따라 버튼 문구 자동 전환 */
     .night-toggle-btn .text-day {
       display: none;
     }
@@ -217,13 +227,54 @@
       display: inline;
     }
 
+    /* ✨ 다채로움 팁 1: 한눈에 보는 나의 서재 통계 배지 3총사 */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .stat-item {
+      background-color: var(--bg-ivory);
+      border: 1px solid var(--border-soft);
+      border-radius: 14px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .stat-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background-color: var(--bg-paper);
+      border: 1px solid var(--border-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    .stat-text span {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--text-sub);
+    }
+
+    .stat-text strong {
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
     /* 올해 책 읽은 목표 게이지 바 영역 */
     .goal-box {
       background-color: var(--bg-ivory);
       border: 1px solid var(--border-soft);
       border-radius: 14px;
-      padding: 20px 24px;
-      transition: background-color 0.35s ease, border-color 0.35s ease;
+      padding: 18px 22px;
     }
 
     .goal-info {
@@ -260,11 +311,10 @@
       border-radius: 999px;
       overflow: hidden;
       padding: 2px;
-      transition: background-color 0.35s ease;
     }
 
     .progress-fill {
-      width: 72%; /* 목표 25권 중 18권 달성 (72%) */
+      width: 72%;
       height: 100%;
       background: linear-gradient(90deg, #5C4632 0%, #C89B57 100%);
       border-radius: 999px;
@@ -276,7 +326,71 @@
     }
 
     /* =========================================
-       3. 카테고리 버튼 & 순수 CSS 필터링 마법
+       ✨ 다채로움 팁 2: '오늘의 밑줄' 대표 배너
+       ========================================= */
+    .spotlight-banner {
+      background: var(--bg-spotlight);
+      border: 1px solid var(--border-soft);
+      border-radius: 20px;
+      padding: 26px 32px;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .spotlight-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background-color: var(--accent-wood);
+      color: #FFFFFF;
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+
+    #night-mode:checked ~ .page-wrapper .spotlight-badge {
+      color: #181614;
+    }
+
+    .spotlight-quote {
+      font-family: 'Gowun Batang', Georgia, serif;
+      font-size: 1.22rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.65;
+      margin-bottom: 6px;
+      word-break: keep-all;
+    }
+
+    .spotlight-source {
+      font-size: 0.88rem;
+      color: var(--text-sub);
+    }
+
+    .spotlight-emblem {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background-color: var(--bg-paper);
+      border: 1px solid var(--border-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      flex-shrink: 0;
+      box-shadow: 0 6px 16px rgba(60, 45, 30, 0.08);
+    }
+
+    /* =========================================
+       3. 카테고리 버튼 & 순수 CSS 필터링
        ========================================= */
     .filter-radio {
       display: none;
@@ -288,7 +402,7 @@
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 12px;
-      margin-bottom: 28px;
+      margin-bottom: 26px;
     }
 
     .category-buttons {
@@ -309,6 +423,14 @@
       transition: all 0.2s ease;
       box-shadow: 0 2px 6px rgba(60, 45, 30, 0.03);
       user-select: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .category-btn .count {
+      font-size: 0.78rem;
+      opacity: 0.75;
     }
 
     .category-btn:hover {
@@ -322,7 +444,7 @@
       color: var(--text-sub);
     }
 
-    /* 선택된 카테고리 버튼의 색상을 진하게 변경 */
+    /* 상단 카테고리 탭과 스마트폰 하단 앱 탭바 동시 활성화 */
     #tab-all:checked ~ .category-bar label[for="tab-all"],
     #tab-humanities:checked ~ .category-bar label[for="tab-humanities"],
     #tab-literature:checked ~ .category-bar label[for="tab-literature"],
@@ -337,10 +459,9 @@
     #night-mode:checked ~ .page-wrapper #tab-humanities:checked ~ .category-bar label[for="tab-humanities"],
     #night-mode:checked ~ .page-wrapper #tab-literature:checked ~ .category-bar label[for="tab-literature"],
     #night-mode:checked ~ .page-wrapper #tab-psychology:checked ~ .category-bar label[for="tab-psychology"] {
-      color: #1C1917;
+      color: #181614;
     }
 
-    /* 선택된 카테고리에 맞춰 해당하는 카드만 보여주기 */
     #tab-humanities:checked ~ .cards-grid .quote-card:not([data-category="인문"]),
     #tab-literature:checked ~ .cards-grid .quote-card:not([data-category="문학"]),
     #tab-psychology:checked ~ .cards-grid .quote-card:not([data-category="심리"]) {
@@ -348,20 +469,20 @@
     }
 
     /* =========================================
-       4. 문장 카드 그리드 (종이 카드 디자인)
+       4. 문장 카드 그리드 + 미니 입체 책 표지 + 감정 키워드
        ========================================= */
     .cards-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
       gap: 24px;
-      align-items: start; /* 메모를 펼쳤을 때 옆 카드의 높이가 늘어나지 않도록 설정 */
+      align-items: start;
     }
 
     .quote-card {
       background-color: var(--bg-paper);
       border: 1px solid var(--border-soft);
       border-radius: 18px;
-      padding: 28px 26px 24px;
+      padding: 26px 24px 22px;
       box-shadow: var(--shadow-card);
       display: flex;
       flex-direction: column;
@@ -395,9 +516,8 @@
       opacity: 0.85;
     }
 
-    /* 카드의 맨 위: 카테고리 배지 + 책 제목/작가 + 울림 별점 */
     .card-header {
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       padding-bottom: 14px;
       border-bottom: 1px dashed var(--border-soft);
     }
@@ -406,7 +526,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       padding-right: 22px;
     }
 
@@ -439,6 +559,49 @@
       font-family: 'Gowun Batang', serif;
     }
 
+    /* ✨ 다채로움 팁 3: 책마다 개성을 살려주는 미니 입체 책 표지 아이콘 */
+    .book-profile {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .mini-book-cover {
+      width: 44px;
+      height: 58px;
+      border-radius: 4px 8px 8px 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      flex-shrink: 0;
+      position: relative;
+      box-shadow: 3px 4px 10px rgba(40, 30, 20, 0.16);
+    }
+
+    /* 실제 양장본 책등(Spine) 홈 표현 */
+    .mini-book-cover::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 6px;
+      width: 2px;
+      background-color: rgba(255, 255, 255, 0.35);
+    }
+
+    .cover-prince { background: linear-gradient(135deg, #355C7D, #6C5B7B); }
+    .cover-dasan  { background: linear-gradient(135deg, #6B5344, #4A3728); }
+    .cover-courage{ background: linear-gradient(135deg, #5C4B7D, #3F3256); }
+    .cover-momo   { background: linear-gradient(135deg, #3B6E5C, #274B3E); }
+    .cover-cosmos { background: linear-gradient(135deg, #283E51, #4B79A1); }
+    .cover-mind   { background: linear-gradient(135deg, #8E6E53, #6C5039); }
+
+    .book-info-main {
+      flex-grow: 1;
+      min-width: 0;
+    }
+
     .book-title {
       font-size: 1.14rem;
       font-weight: 700;
@@ -450,24 +613,23 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
     }
 
     .book-author {
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       color: var(--text-sub);
     }
 
-    /* ⭐ 마음의 울림 별점 스타일 */
     .resonance-stars {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      font-size: 0.78rem;
+      gap: 4px;
+      font-size: 0.76rem;
       color: var(--text-sub);
       background-color: var(--bg-memo);
-      padding: 3px 9px;
+      padding: 2px 8px;
       border-radius: 999px;
       border: 1px solid var(--border-soft);
     }
@@ -475,15 +637,15 @@
     .resonance-stars .stars {
       color: #D99B38;
       letter-spacing: 1px;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
     }
 
-    /* 책 속의 감동적인 문장 (큰따옴표 강조 + 형광펜 밑줄 효과) */
+    /* 책 속의 감동적인 문장 */
     .quote-body {
       position: relative;
-      padding: 12px 6px 18px;
-      margin-bottom: 12px;
-      min-height: 115px;
+      padding: 10px 6px 14px;
+      margin-bottom: 10px;
+      min-height: 110px;
       display: flex;
       align-items: center;
     }
@@ -503,7 +665,7 @@
 
     .quote-text {
       font-family: 'Gowun Batang', Georgia, serif;
-      font-size: 1.08rem;
+      font-size: 1.07rem;
       line-height: 1.85;
       color: var(--text-main);
       word-break: keep-all;
@@ -517,14 +679,30 @@
       border-radius: 3px;
     }
 
-    /* 🔍 짧은 생각 메모 접었다 펴기 (<details> 태그 활용) */
+    /* ✨ 다채로움 팁 4: 문장이 주는 기분을 나타낸 감성 키워드 해시태그 */
+    .mood-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .mood-chip {
+      font-size: 0.76rem;
+      color: var(--text-sub);
+      background-color: var(--bg-ivory);
+      border: 1px solid var(--border-soft);
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+
+    /* 짧은 생각 메모 접었다 펴기 */
     .thought-memo-fold {
       background-color: var(--bg-memo);
       border: 1px solid var(--border-soft);
       border-left: 3px solid var(--accent-gold);
       border-radius: 6px 12px 12px 6px;
       overflow: hidden;
-      transition: background-color 0.35s ease, border-color 0.35s ease;
     }
 
     .memo-summary {
@@ -538,10 +716,8 @@
       justify-content: space-between;
       align-items: center;
       user-select: none;
-      transition: background-color 0.2s ease;
     }
 
-    /* 기본 삼각형 아이콘 숨기기 */
     .memo-summary::-webkit-details-marker {
       display: none;
     }
@@ -582,7 +758,7 @@
     }
 
     /* =========================================
-       5. 하단 바닥글
+       5. 하단 바닥글 (HTML/CSS 언급 제거 완료)
        ========================================= */
     .library-footer {
       text-align: center;
@@ -592,26 +768,33 @@
     }
 
     /* =========================================
+       📱 스마트폰 전용 하단 앱 탭바 (진짜 모바일 앱 느낌!)
+       ========================================= */
+    .mobile-bottom-nav {
+      display: none;
+    }
+
+    /* =========================================
        6. 스마트폰 반응형 (앱처럼 세로로 예쁘게!)
        ========================================= */
     @media (max-width: 640px) {
       .page-wrapper {
-        padding: 18px 14px 56px;
+        padding: 16px 14px 96px; /* 하단 앱 탭바 공간 확보 */
       }
 
       .library-header {
-        padding: 24px 20px;
-        border-radius: 16px;
-        gap: 20px;
-        margin-bottom: 22px;
+        padding: 22px 18px;
+        border-radius: 18px;
+        gap: 18px;
+        margin-bottom: 18px;
       }
 
       .title-group h1 {
-        font-size: 1.6rem;
+        font-size: 1.58rem;
       }
 
       .title-group p {
-        font-size: 0.9rem;
+        font-size: 0.88rem;
       }
 
       .header-controls {
@@ -619,8 +802,30 @@
         justify-content: space-between;
       }
 
+      .stats-row {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
+
+      .stat-item {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 12px;
+        gap: 6px;
+      }
+
+      .stat-icon {
+        width: 34px;
+        height: 34px;
+        font-size: 1.05rem;
+      }
+
+      .stat-text strong {
+        font-size: 0.95rem;
+      }
+
       .goal-box {
-        padding: 16px;
+        padding: 15px;
       }
 
       .goal-info {
@@ -629,10 +834,25 @@
         gap: 4px;
       }
 
+      .spotlight-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+      .spotlight-emblem {
+        display: none;
+      }
+
+      .spotlight-quote {
+        font-size: 1.08rem;
+      }
+
       .category-bar {
         flex-direction: column;
         align-items: stretch;
-        margin-bottom: 20px;
+        margin-bottom: 18px;
       }
 
       .category-buttons {
@@ -642,35 +862,79 @@
       }
 
       .category-btn {
-        text-align: center;
+        justify-content: center;
         padding: 10px 0;
-        font-size: 0.9rem;
+        font-size: 0.88rem;
       }
 
       .helper-tip {
         text-align: center;
       }
 
-      /* 스마트폰에서는 세로로 1줄씩 또렷하게 배치 */
       .cards-grid {
         grid-template-columns: 1fr;
         gap: 16px;
       }
 
       .quote-card {
-        padding: 22px 20px;
+        padding: 22px 18px;
+      }
+
+      /* 스마트폰 화면에서는 하단 고정 앱 내비게이션 바 표시 */
+      .mobile-bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 66px;
+        background-color: var(--nav-glass);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-top: 1px solid var(--border-soft);
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        padding: 6px 10px calc(6px + env(safe-area-inset-bottom));
+        z-index: 100;
+        box-shadow: 0 -4px 20px rgba(40, 30, 20, 0.08);
+      }
+
+      .mobile-nav-item {
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        color: var(--text-sub);
+        font-size: 0.74rem;
+        font-weight: 600;
+        border-radius: 12px;
+        user-select: none;
+        transition: all 0.2s ease;
+      }
+
+      .mobile-nav-item .nav-icon {
+        font-size: 1.15rem;
+      }
+
+      #tab-all:checked ~ .mobile-bottom-nav label[for="tab-all"],
+      #tab-humanities:checked ~ .mobile-bottom-nav label[for="tab-humanities"],
+      #tab-literature:checked ~ .mobile-bottom-nav label[for="tab-literature"],
+      #tab-psychology:checked ~ .mobile-bottom-nav label[for="tab-psychology"] {
+        color: var(--accent-wood);
+        background-color: var(--bg-memo);
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- 🌙 1번 아이디어: 밤 독서 모드 스위치 (자바스크립트 없이 체크박스로만 작동!) -->
+  <!-- 밤 독서 모드 스위치 -->
   <input type="checkbox" id="night-mode" class="theme-checkbox">
 
   <div class="page-wrapper">
     <div class="library-container">
-      <!-- 맨 위: 서재 제목과 올해 책 읽은 목표 게이지 바 -->
+      <!-- 1. 맨 위: 서재 제목 + 미니 통계 + 올해 독서 목표 게이지 바 -->
       <header class="library-header">
         <div class="header-top">
           <div class="title-group">
@@ -680,11 +944,35 @@
           </div>
           <div class="header-controls">
             <div class="date-badge">📖 나만의 독서 기록장</div>
-            <!-- 밤 독서 모드 스위치 버튼 -->
             <label for="night-mode" class="night-toggle-btn" title="클릭하면 낮/밤 서재 분위기가 바뀝니다">
-              <span class="text-night">🌙 밤 독서 모드 켜기</span>
-              <span class="text-day">☀️ 낮 서재 모드 켜기</span>
+              <span class="text-night">🌙 밤 독서 모드</span>
+              <span class="text-day">☀️ 낮 서재 모드</span>
             </label>
+          </div>
+        </div>
+
+        <!-- 한눈에 보는 서재 요약 통계 3총사 -->
+        <div class="stats-row" aria-label="나의 독서 기록 요약">
+          <div class="stat-item">
+            <div class="stat-icon">🔖</div>
+            <div class="stat-text">
+              <span>수집한 문장</span>
+              <strong>총 6개 구절</strong>
+            </div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-icon">📚</div>
+            <div class="stat-text">
+              <span>가장 사랑한 분야</span>
+              <strong>문학 · 인문</strong>
+            </div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-icon">🕯️</div>
+            <div class="stat-text">
+              <span>이번 달 독서 온도</span>
+              <strong>따뜻함 98°C</strong>
+            </div>
           </div>
         </div>
 
@@ -699,7 +987,19 @@
         </div>
       </header>
 
-      <!-- 카테고리 선택 라디오 스위치 (자바스크립트 없이 CSS로만 작동!) -->
+      <!-- 2. 오늘의 대표 밑줄 배너 -->
+      <section class="spotlight-banner" aria-label="오늘의 대표 문장">
+        <div class="spotlight-content">
+          <span class="spotlight-badge">✨ 오늘의 마음 밑줄</span>
+          <p class="spotlight-quote">
+            “달력에 적힌 시간보다 더 진짜인 시간은, 누군가의 이야기를 진심으로 귀 기울여 들어주던 따뜻한 순간들이다.”
+          </p>
+          <p class="spotlight-source">— 미하엘 엔데, 《모모》 중에서</p>
+        </div>
+        <div class="spotlight-emblem" aria-hidden="true">☕</div>
+      </section>
+
+      <!-- 3. 카테고리 선택 라디오 스위치 -->
       <input type="radio" name="category-filter" id="tab-all" class="filter-radio" checked>
       <input type="radio" name="category-filter" id="tab-humanities" class="filter-radio">
       <input type="radio" name="category-filter" id="tab-literature" class="filter-radio">
@@ -707,30 +1007,33 @@
 
       <nav class="category-bar" aria-label="도서 카테고리 선택">
         <div class="category-buttons">
-          <label for="tab-all" class="category-btn">전체</label>
-          <label for="tab-humanities" class="category-btn">인문</label>
-          <label for="tab-literature" class="category-btn">문학</label>
-          <label for="tab-psychology" class="category-btn">심리</label>
+          <label for="tab-all" class="category-btn">전체 <span class="count">6</span></label>
+          <label for="tab-humanities" class="category-btn">인문 <span class="count">2</span></label>
+          <label for="tab-literature" class="category-btn">문학 <span class="count">2</span></label>
+          <label for="tab-psychology" class="category-btn">심리 <span class="count">2</span></label>
         </div>
         <span class="helper-tip">✨ 주제 버튼을 누르거나 카드 아래의 생각 메모를 펼쳐보세요.</span>
       </nav>
 
-      <!-- 문장 카드들 모음 -->
+      <!-- 4. 문장 카드들 모음 -->
       <main class="cards-grid">
 
-        <!-- 카드 1: 문학 (기본으로 메모가 펼쳐져 있도록 open 속성 부여) -->
+        <!-- 카드 1: 문학 -->
         <article class="quote-card" data-category="문학">
           <div class="card-header">
             <div class="card-meta-top">
               <span class="category-tag tag-literature">문학</span>
               <span class="page-num">p. 114 · 2026. 10. 12</span>
             </div>
-            <h2 class="book-title">어린 왕자</h2>
-            <div class="author-and-rating">
-              <p class="book-author">앙투안 드 생텍쥐페리 지음</p>
-              <span class="resonance-stars" aria-label="마음의 울림 별점 5점 만점에 5점">
-                울림 <span class="stars">★★★★★</span>
-              </span>
+            <div class="book-profile">
+              <div class="mini-book-cover cover-prince" aria-hidden="true">🦊</div>
+              <div class="book-info-main">
+                <h2 class="book-title">어린 왕자</h2>
+                <div class="author-and-rating">
+                  <p class="book-author">앙투안 드 생텍쥐페리</p>
+                  <span class="resonance-stars">울림 <span class="stars">★★★★★</span></span>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -739,6 +1042,12 @@
               “가장 중요한 것은 눈에 보이지 않아. <span class="highlight">마음으로 보아야만 비로소 또렷하게 볼 수 있단다.</span>”
             </p>
           </blockquote>
+
+          <div class="mood-tags">
+            <span class="mood-chip">#소중한마음</span>
+            <span class="mood-chip">#다정한시선</span>
+            <span class="mood-chip">#위로</span>
+          </div>
 
           <details class="thought-memo-fold" open>
             <summary class="memo-summary">
@@ -758,12 +1067,15 @@
               <span class="category-tag tag-humanities">인문</span>
               <span class="page-num">p. 42 · 2026. 10. 19</span>
             </div>
-            <h2 class="book-title">다산의 마지막 공부</h2>
-            <div class="author-and-rating">
-              <p class="book-author">정약용 원전 · 조윤제 엮음</p>
-              <span class="resonance-stars" aria-label="마음의 울림 별점 5점 만점에 5점">
-                울림 <span class="stars">★★★★★</span>
-              </span>
+            <div class="book-profile">
+              <div class="mini-book-cover cover-dasan" aria-hidden="true">🖋️</div>
+              <div class="book-info-main">
+                <h2 class="book-title">다산의 마지막 공부</h2>
+                <div class="author-and-rating">
+                  <p class="book-author">정약용 · 조윤제</p>
+                  <span class="resonance-stars">울림 <span class="stars">★★★★★</span></span>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -772,6 +1084,12 @@
               “배움이란 <span class="highlight">어제의 나보다 오늘 한 걸음 더 다정하고 지혜로운 사람</span>이 되기 위해 매일 마음을 닦는 일이다.”
             </p>
           </blockquote>
+
+          <div class="mood-tags">
+            <span class="mood-chip">#하루한걸음</span>
+            <span class="mood-chip">#삶의지혜</span>
+            <span class="mood-chip">#성장</span>
+          </div>
 
           <details class="thought-memo-fold" open>
             <summary class="memo-summary">
@@ -791,12 +1109,15 @@
               <span class="category-tag tag-psychology">심리</span>
               <span class="page-num">p. 89 · 2026. 10. 24</span>
             </div>
-            <h2 class="book-title">미움받을 용기</h2>
-            <div class="author-and-rating">
-              <p class="book-author">기시미 이치로 · 고가 후미타케 지음</p>
-              <span class="resonance-stars" aria-label="마음의 울림 별점 5점 만점에 4점">
-                울림 <span class="stars">★★★★☆</span>
-              </span>
+            <div class="book-profile">
+              <div class="mini-book-cover cover-courage" aria-hidden="true">🌱</div>
+              <div class="book-info-main">
+                <h2 class="book-title">미움받을 용기</h2>
+                <div class="author-and-rating">
+                  <p class="book-author">기시미 이치로 · 고가 후미타케</p>
+                  <span class="resonance-stars">울림 <span class="stars">★★★★☆</span></span>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -805,6 +1126,12 @@
               “과거가 지금의 나를 결정하는 것이 아니라, <span class="highlight">지금 여기에 있는 내가 과거에 어떤 의미를 부여하느냐</span>가 나의 삶을 결정한다.”
             </p>
           </blockquote>
+
+          <div class="mood-tags">
+            <span class="mood-chip">#작은용기</span>
+            <span class="mood-chip">#현재에집중</span>
+            <span class="mood-chip">#자존감</span>
+          </div>
 
           <details class="thought-memo-fold">
             <summary class="memo-summary">
@@ -824,12 +1151,15 @@
               <span class="category-tag tag-literature">문학</span>
               <span class="page-num">p. 203 · 2026. 10. 28</span>
             </div>
-            <h2 class="book-title">모모</h2>
-            <div class="author-and-rating">
-              <p class="book-author">미하엘 엔데 지음</p>
-              <span class="resonance-stars" aria-label="마음의 울림 별점 5점 만점에 5점">
-                울림 <span class="stars">★★★★★</span>
-              </span>
+            <div class="book-profile">
+              <div class="mini-book-cover cover-momo" aria-hidden="true">⏳</div>
+              <div class="book-info-main">
+                <h2 class="book-title">모모</h2>
+                <div class="author-and-rating">
+                  <p class="book-author">미하엘 엔데</p>
+                  <span class="resonance-stars">울림 <span class="stars">★★★★★</span></span>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -838,6 +1168,12 @@
               “달력에 적힌 시간보다 더 진짜인 시간은, <span class="highlight">누군가의 이야기를 진심으로 귀 기울여 들어주던 따뜻한 순간들</span>이다.”
             </p>
           </blockquote>
+
+          <div class="mood-tags">
+            <span class="mood-chip">#경청의힘</span>
+            <span class="mood-chip">#따뜻한시간</span>
+            <span class="mood-chip">#공감</span>
+          </div>
 
           <details class="thought-memo-fold">
             <summary class="memo-summary">
@@ -857,12 +1193,15 @@
               <span class="category-tag tag-humanities">인문</span>
               <span class="page-num">p. 156 · 2026. 10. 31</span>
             </div>
-            <h2 class="book-title">코스모스</h2>
-            <div class="author-and-rating">
-              <p class="book-author">칼 세이건 지음</p>
-              <span class="resonance-stars" aria-label="마음의 울림 별점 5점 만점에 5점">
-                울림 <span class="stars">★★★★★</span>
-              </span>
+            <div class="book-profile">
+              <div class="mini-book-cover cover-cosmos" aria-hidden="true">🪐</div>
+              <div class="book-info-main">
+                <h2 class="book-title">코스모스</h2>
+                <div class="author-and-rating">
+                  <p class="book-author">칼 세이건</p>
+                  <span class="resonance-stars">울림 <span class="stars">★★★★★</span></span>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -871,6 +1210,12 @@
               “광막한 우주와 끝없는 시간 속에서, <span class="highlight">같은 행성과 같은 시대를 당신과 함께 살아갈 수 있다는 것</span>은 나에게 큰 기쁨이다.”
             </p>
           </blockquote>
+
+          <div class="mood-tags">
+            <span class="mood-chip">#소중한인연</span>
+            <span class="mood-chip">#우주와나</span>
+            <span class="mood-chip">#감사</span>
+          </div>
 
           <details class="thought-memo-fold">
             <summary class="memo-summary">
@@ -890,12 +1235,15 @@
               <span class="category-tag tag-psychology">심리</span>
               <span class="page-num">p. 64 · 2026. 11. 02</span>
             </div>
-            <h2 class="book-title">마음의 법칙</h2>
-            <div class="author-and-rating">
-              <p class="book-author">폴 커윤 지음</p>
-              <span class="resonance-stars" aria-label="마음의 울림 별점 5점 만점에 4점">
-                울림 <span class="stars">★★★★☆</span>
-              </span>
+            <div class="book-profile">
+              <div class="mini-book-cover cover-mind" aria-hidden="true">☕</div>
+              <div class="book-info-main">
+                <h2 class="book-title">마음의 법칙</h2>
+                <div class="author-and-rating">
+                  <p class="book-author">폴 커윤</p>
+                  <span class="resonance-stars">울림 <span class="stars">★★★★☆</span></span>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -904,6 +1252,12 @@
               “불안은 우리가 무언가를 소중히 여기고 <span class="highlight">잘 해내고 싶어 한다는 마음의 다정한 신호</span>일 뿐이다.”
             </p>
           </blockquote>
+
+          <div class="mood-tags">
+            <span class="mood-chip">#마음토닥이기</span>
+            <span class="mood-chip">#다정한신호</span>
+            <span class="mood-chip">#응원</span>
+          </div>
 
           <details class="thought-memo-fold">
             <summary class="memo-summary">
@@ -919,8 +1273,28 @@
       </main>
 
       <footer class="library-footer">
-        <p>온기 문장 서재 · 오직 HTML과 CSS로 지은 고요한 종이 서재</p>
+        <p>온기 문장 서재 · 매일 한 문장씩 마음을 채우는 나만의 독서 기록장</p>
       </footer>
+
+      <!-- 📱 스마트폰에서 앱처럼 사용할 수 있는 하단 고정 탭바 -->
+      <nav class="mobile-bottom-nav" aria-label="모바일 앱 하단 메뉴">
+        <label for="tab-all" class="mobile-nav-item">
+          <span class="nav-icon">🏠</span>
+          <span>전체 서재</span>
+        </label>
+        <label for="tab-humanities" class="mobile-nav-item">
+          <span class="nav-icon">🏛️</span>
+          <span>인문</span>
+        </label>
+        <label for="tab-literature" class="mobile-nav-item">
+          <span class="nav-icon">🌿</span>
+          <span>문학</span>
+        </label>
+        <label for="tab-psychology" class="mobile-nav-item">
+          <span class="nav-icon">💜</span>
+          <span>심리</span>
+        </label>
+      </nav>
     </div>
   </div>
 
